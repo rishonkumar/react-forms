@@ -4,16 +4,15 @@ import { useState } from 'react';
 
 function App() {
 
-  // we need state to hold current data
   const[firstName,setFirstName] = useState("")
+  const[lastName,setLastName] = useState("")
 
-  function handleChange(event) {
-    // console.log("Changed")
-    // console.log(event)
-    // console.log(event.target)
-    // console.log(event.target.value)
-    setFirstName(event.target.value)
-    
+  function handleFirstChange(event) {
+    setFirstName(event.target.value)    
+  }
+
+  function handleLastChange(event) {
+    setLastName(event.target.value);
   }
 
   return (
@@ -21,7 +20,12 @@ function App() {
       <input 
         type="text"  
         placeholder='First name'
-        onChange={handleChange}
+        onChange={handleFirstChange}
+      />
+      <input 
+        type="text"  
+        placeholder='Last name'
+        onChange={handleLastChange}
       />
     </form>
   );
