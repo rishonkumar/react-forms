@@ -1,51 +1,54 @@
-import { useRef, useState } from "react";
 import "../App.css";
+import { useState } from "react";
 
 const SimpleInput = (props) => {
-  const nameInputRef = useRef();
   const [enteredName, setEnteredName] = useState("");
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const [enteredNameTouched, setEnteredNameTouched] = useState(false);
 
-  const nameInput = (event) => {
+  const enteredNameIsValid = enteredName.trim() !== "";
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
+
+  const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
   };
 
-  const formSubmission = (event) => {
-    event.preventDefault();
+  const nameInputBlurHandler = (event) => {
     setEnteredNameTouched(true);
-    // console.log(enteredName);
-
-    if (enteredName.trim() === "") {
-      setEnteredNameIsValid(false);
-      return;
-    }
-    setEnteredNameIsValid(true);
-
-    // const enteredValue = nameInputRef.current.value;
-    // console.log(enteredValue);
-    setEnteredName("");
   };
 
-  const nameInputIsInValid = !enteredNameIsValid && enteredNameTouched;
+  const formSubmissionHandler = (event) => {
+    event.preventDefault();
 
-  const nameInputClasses = nameInputIsInValid
+    setEnteredNameTouched(true);
+
+    if (!enteredNameIsValid) {
+      return;
+    }
+
+    console.log(enteredName);
+
+    // nameInputRef.current.value = ''; => NOT IDEAL, DON'T MANIPULATE THE DOM
+    setEnteredName("");
+    setEnteredNameTouched(false);
+  };
+
+  const nameInputClasses = nameInputIsInvalid
     ? "form-control invalid"
     : "form-control";
 
   return (
-    <form onSubmit={formSubmission}>
+    <form onSubmit={formSubmissionHandler}>
       <div className={nameInputClasses}>
         <label htmlFor="name">Your Name</label>
         <input
-          ref={nameInputRef}
           type="text"
           id="name"
-          onChange={nameInput}
+          onChange={nameInputChangeHandler}
+          onBlur={nameInputBlurHandler}
           value={enteredName}
         />
-        {nameInputIsInValid && (
-          <p className="error-text">Name must not be empty</p>
+        {nameInputIsInvalid && (
+          <p className="error-text">Name must not be empty.</p>
         )}
       </div>
       <div className="form-actions">
